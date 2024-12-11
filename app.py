@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_jwt import JWT, jwt_required, current_identity
 
 app = Flask(__name__)
 

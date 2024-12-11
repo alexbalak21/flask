@@ -1,0 +1,13 @@
+POST http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{
+    "username": "alex",
+    "password": "pass"
+}
+
+###
+
+GET http://127.0.0.1:8000/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMzkxMjI5MCwianRpIjoiODU5MjQyYzctYTI5YS00NTZkLTg1MmYtYTVhMmQxY2Y1ZmIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFsZXgiLCJuYmYiOjE3MzM5MTIyOTAsImNzcmYiOiIwNjQ0NGM0NS0zZDk1LTQ0YTktYWIyYi0xZDgyNjZkNThjZTEiLCJleHAiOjE3MzM5MTMxOTB9.Hulh1cm7dPiI9POTxu0K-LzhoV9PWxkOklEbHtl8KUw
+Content-Type: application/json

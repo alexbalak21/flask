@@ -12,6 +12,9 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
+from flask_jwt_extended import set_refresh_cookies
+from flask_jwt_extended import unset_refresh_cookies
+
 
 app = Flask(__name__)
 

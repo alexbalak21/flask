@@ -1,7 +1,6 @@
 from datetime import timedelta
 
-from flask import Flask
-from flask import jsonify
+from flask import Flask, jsonify, request
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token
@@ -19,8 +18,12 @@ jwt = JWTManager(app)
 
 @app.route("/login", methods=["POST"])
 def login():
-    access_token = create_access_token(identity="example_user")
-    refresh_token = create_refresh_token(identity="example_user")
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if username != "alex" or password != "pass":
+        return jsonify({"msg": "Bad username or password"}), 401
+    access_token = create_access_token(identity="Alex")
+    refresh_token = create_refresh_token(identity="refresh alex", additional_claims={"uuid":"uniq_user_id"})
     return jsonify(access_token=access_token, refresh_token=refresh_token)
 
 
@@ -30,11 +33,15 @@ def login():
 @jwt_required(refresh=True)
 def refresh():
     identity = get_jwt_identity()
+    identity = str(identity).replace("refresh ", "").capitalize()
     access_token = create_access_token(identity=identity)
-    return jsonify(access_token=access_token)
+    return jsonify(identity=identity ,access_token=access_token)
+
+
 
 
 @app.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
-    return jsonify(foo="bar")
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200

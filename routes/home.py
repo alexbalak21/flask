@@ -10,5 +10,6 @@ def homepage():
 
 @home.get("/init")
 def init():
+    return "Init"
     
 

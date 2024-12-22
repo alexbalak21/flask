@@ -14,6 +14,11 @@ Content-Type: application/json
 
 ###
 
+GET http://127.0.0.1:8000/user/all
+
+
+###
+
 GET http://127.0.0.1:8000/protected
 Authorization : Bearer 
 Content-Type: application/json

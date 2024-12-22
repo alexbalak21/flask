@@ -8,3 +8,6 @@ class User(db.Model):
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column(nullable=False)
     # email: Mapped[str]
+
+    def __str__(self):
+        return f"id:{self.id}, username:{self.username}, password:{self.password}"

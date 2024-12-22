@@ -10,4 +10,8 @@ class User(db.Model):
     # email: Mapped[str]
 
     def __str__(self):
-        return f"id:{self.id}, username:{self.username}, password:{self.password}"
+        return "{" + f"id:{self.id}, username:{self.username}, password:{self.password}" + "}"
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name)
+                for c in self.__table__.columns}

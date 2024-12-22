@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from ..repository.database import init_db, add_db, add_user, get_all
+from ..repository.database import init_db, add_db, create_user, get_all
 from ..models.User import User
 
 
@@ -27,13 +27,18 @@ def init():
 def signin():
     username = request.json.get("username", None)
     password = request.json.get("password", None)
-    if username == None or password == None:
+    if not username or not password:
         return jsonify({"msg": "Bad username or password"}), 401
-    result = add_user(username, password)
-    if result:
-        return jsonify({"msg": f'{username} added to the database.'}), 201
-    else:
-        return jsonify({"msg": "failed to add user to db."}), 500
+    try:
+        new_user = create_user(username, password)  # Fixed function call
+        return jsonify(new_user), 201
+    except ValueError as e:
+        if str(e) == "Username already exists. Please choose a different one.":
+            # Conflict status code for existing resource
+            return jsonify({"msg": str(e)}), 409
+        return jsonify({"msg": "An error occurred. Please try again."}), 500
+    except Exception as e:
+        return jsonify({"msg": "Failed to add user to db."}), 500
 
 
 @user.get("/all")

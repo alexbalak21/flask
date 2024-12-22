@@ -33,6 +33,17 @@ def create_user(username, password):
         raise ValueError("There was an error while creating the user.")
 
 
+def get_one(id: int):
+    user = User.query.filter_by(id=id).first()
+    return None if user is None else user.as_dict()
+
+
+def update_user(id: int):
+    user = User.query.filter_by(id=id).first()
+    if user is None:
+        return None
+
+
 def get_all():
     users = [user.as_dict() for user in User.query.all()]
     return users

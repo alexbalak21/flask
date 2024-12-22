@@ -1,0 +1,31 @@
+POST http://127.0.0.1:8000/user/signin
+Content-Type: application/json
+
+{
+    "username": "alex",
+    "password": "pass"
+}
+
+###
+
+GET http://127.0.0.1:8000/protected
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMzkzMjIwNSwianRpIjoiYjYxMTMwOTUtZDA0Mi00NDlhLTgxOGEtNzFmNWExZjFiZDFmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkFsZXgiLCJuYmYiOjE3MzM5MzIyMDUsImNzcmYiOiI2YTdkNjg0MC1jNjZhLTQ4MDUtOTY5OS0xYTJiYzQ4NmU4ZDEiLCJleHAiOjE3MzM5MzU4MDV9.JYYU529Yvozcdb2yRt8mVWjHO3CnDuClVL3JMZYD4MI
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/protected
+Authorization : Bearer 
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/protected
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMzkzMjc3OCwianRpIjoiYTgzYjhlODEtNzA5Ni00OTc3LThiNWItMzI2OGQ4MWIzZDA3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkFsZXgiLCJuYmYiOjE3MzM5MzI3NzgsImNzcmYiOiJmOTViMTA2MS01NzY0LTQxMGUtYjVjNi05YWY5Zjc3Yzg3ZTgiLCJleHAiOjE3MzM5MzYzNzh9.HGDnMDX4-MIIL1ci3iroryIXZE7t4HC6t3IJDR8387o
+Content-Type: application/json
+
+###
+
+POST http://127.0.0.1:8000/refresh
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMzkzMjc2MSwianRpIjoiZWE2MTkxMTktOTBiZi00NzBlLWJlMzUtOWQ5ZWQ4MDU4ZWE5IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOiJyZWZyZXNoIGFsZXgiLCJuYmYiOjE3MzM5MzI3NjEsImNzcmYiOiJjZDUxNjgyNy1mM2Y2LTQ0MTQtYTUyMy0zODJhMWIwMzI2NmMiLCJleHAiOjE3MzUxNDIzNjEsInV1aWQiOiJ1bmlxX3VzZXJfaWQifQ.wINqFb3CxTsPU2BTRsp5rhTmgAn7rCRxJPCkMP5gVTI
+Content-Type: application/json

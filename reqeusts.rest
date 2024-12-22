@@ -6,7 +6,7 @@ POST http://127.0.0.1:8000/user/signin
 Content-Type: application/json
 
 {
-    "username": "Alex",
+    "username": "Lara",
     "password": "pass"
 }
 
@@ -26,6 +26,9 @@ GET http://127.0.0.1:8000/user/all
 
 ###GET 1
 GET http://127.0.0.1:8000/user/1
+
+
+### D
 
 
 ###

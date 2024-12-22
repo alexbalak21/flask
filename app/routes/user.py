@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from ..repository.database import init_db, create_user, get_all, get_one, update_user
+from ..repository.database import UserRepository as UserRepo
 from ..models.User import User
 
 
@@ -8,7 +8,7 @@ user = Blueprint('user', __name__)
 
 @user.get("/init")
 def home_page():
-    init_db()
+    UserRepo.init_db()
     return "Database Init Done."
 
 
@@ -24,7 +24,8 @@ def signin():
     if not username or not password:
         return jsonify({"msg": "Bad username or password"}), 401
     try:
-        new_user = create_user(username, password)  # Fixed function call
+        new_user = UserRepo.create_user(
+            username, password)  # Fixed function call
         return jsonify(new_user), 201
     except ValueError as e:
         if str(e) == "Username already exists. Please choose a different one.":
@@ -37,12 +38,12 @@ def signin():
 
 @user.get("/all")
 def get_all_users():
-    return jsonify(get_all())
+    return jsonify(UserRepo.get_all())
 
 
 @user.get('/<int:id>')
 def find_by_id(id):
-    user = get_one(id)
+    user = UserRepo.get_one(id)
     if user is None:
         return jsonify({"msg": "user not found"}), 404
     return jsonify(user)
@@ -54,8 +55,13 @@ def update(user_id):
     password = request.json.get("password", None)
     if not username and not password:
         return jsonify({"msg": "Nothing to update"}), 401
-    updated_user = update_user(user_id, username, password)
+    updated_user = UserRepo.update_user(user_id, username, password)
     if updated_user is None:
         return jsonify({"msg": "user not found"}), 404
     else:
-        return jsonify(updated_user), 201
+        return jsonify(updated_user), 200
+
+
+@user.delete("<int:user_id>")
+def delete_user():
+    return None

@@ -10,12 +10,22 @@ Content-Type: application/json
     "password": "pass"
 }
 
+###UPDATE
+PUT http://127.0.0.1:8000/user/1
+Content-Type: application/json
+
+{
+    "username": "Max",
+    "password": "payne"
+}
+
+
 ###GET ALL
 GET http://127.0.0.1:8000/user/all
 
 
 ###GET 1
-GET http://127.0.0.1:8000/user/2
+GET http://127.0.0.1:8000/user/1
 
 
 ###

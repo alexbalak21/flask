@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from ..repository.database import init_db, add_db, create_user, get_all, get_one
+from ..repository.database import init_db, create_user, get_all, get_one, update_user
 from ..models.User import User
 
 
@@ -52,5 +52,10 @@ def find_by_id(id):
 def update(user_id):
     username = request.json.get("username", None)
     password = request.json.get("password", None)
-    if not username or not password:
-        return jsonify({"msg": "Bad username or password"}), 401
+    if not username and not password:
+        return jsonify({"msg": "Nothing to update"}), 401
+    updated_user = update_user(user_id, username, password)
+    if updated_user is None:
+        return jsonify({"msg": "user not found"}), 404
+    else:
+        return jsonify(updated_user), 201

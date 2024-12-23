@@ -7,12 +7,16 @@ user = Blueprint('user', __name__)
 
 class UserRoutes:
     
-    def get_headers(f):
+    def get_authorization_header(f):
         def decorated_function(*args, **kwargs):
-            headers = request.headers
-            print(headers)  # You can process the headers as needed
+            auth_header = request.headers.get('Authorization')
+            if auth_header:
+                print(f"Authorization : {auth_header}")
+            else:
+                print("No Authorization Header found")
             return f(*args, **kwargs)
         return decorated_function
+
 
     @user.get("/init")
     def home_page():
@@ -20,7 +24,7 @@ class UserRoutes:
         return "Database Init Done."
 
     @user.get('/')
-    @get_headers
+    @get_authorization_header
     def init():
         return "User Home"
 

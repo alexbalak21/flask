@@ -1,0 +1,19 @@
+{
+  "name": "blog-app",
+  "version": "1.0.0",
+  "description": "A simple blog application",
+  "main": "src/app.py",
+  "scripts": {
+    "start": "python src/app.py",
+    "test": "pytest"
+  },
+  "dependencies": {
+    "flask": "^2.0.0",
+    "sqlalchemy": "^1.4.0"
+  },
+  "devDependencies": {
+    "pytest": "^6.0.0"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}

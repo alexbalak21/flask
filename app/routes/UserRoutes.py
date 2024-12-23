@@ -56,7 +56,7 @@ class UserRoutes:
         if not UserRepo.check_login(username, password) :
             return jsonify({"msg": "Bad password"}), 401
         else:
-            return jsonify({"token" : Jwt.encode({"username": username})}), 200
+            return jsonify({"access_token" : Jwt.encode({"username": username}), "token_type" : "Bearer"}), 200
             
         
         

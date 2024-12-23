@@ -64,11 +64,12 @@ class UserRepository:
             db.session.rollback()
             raise ValueError(
                 "There was an error while deleting the user: " + str(e))
+    
+    def user_exists(username: str) -> bool:
+        return User.query.filter_by(username=username).first() is not None
             
-    def check_login(username: str, password: str):
+    def check_login(username: str, password: str) -> bool:
         user = User.query.filter_by(username=username).first()
-        if user is None:
-            return False
         return check_password_hash(user.password, password)
 
         

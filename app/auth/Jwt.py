@@ -5,12 +5,14 @@ class Jwt:
     def __init__(self):
         self.secret_key = os.getenv("SECRET_KEY")
         self.algorithm = os.getenv("ALGORITHM")
-        self.expiry_time
+        self.expiry_time= os.getenv("EXPIRATION_TIME")
         self.issuer
         self.audience
     
-    def encode(self, payload):
-        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+    @staticmethod
+    def encode(payload):
+        return jwt.encode(payload, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
     
-    def decode(self, token):
-        return jwt.decode(token, self.secret_key, algorithms=self.algorithm)
+    @staticmethod
+    def decode(token):
+        return jwt.decode(token, key= os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")])

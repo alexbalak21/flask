@@ -1,13 +1,24 @@
 ###REINIT ALL
 GET http://127.0.0.1:8000/user/init
 
-####SIGUNP USER
+####SIGN UP USER
 POST http://127.0.0.1:8000/user/signin
 Content-Type: application/json
 
 {
-    "username": "Lara",
-    "password": "pass"
+    "username": "Alex",
+    "password": "pass123"
+}
+
+
+
+####LOGIN USER
+POST http://127.0.0.1:8000/user/login
+Content-Type: application/json
+
+{
+    "username": "Alex",
+    "password": "pass123"
 }
 
 ###UPDATE

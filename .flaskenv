@@ -5,3 +5,4 @@ FLASK_RUN_PORT=8000
 DB_NAME=sqlite:///database.sqlite
 SECRET_KEY=Super_Secret
 ALGORITHM=HS256
+EXPIRATION_TIME=15minutes

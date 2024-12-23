@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from ..repository.UserRepository import UserRepository as UserRepo
-from ..models.User import User
+from ..auth.Jwt import Jwt
 
 
 user = Blueprint('user', __name__)
@@ -51,6 +51,13 @@ class UserRoutes:
         password = request.json.get("password", None)
         if not username or not password:
             return jsonify({"msg": "Bad username or password"}), 401
+        if not UserRepo.user_exists(username):
+            return jsonify({"msg": "User not found"}), 404
+        if not UserRepo.check_login(username, password) :
+            return jsonify({"msg": "Bad password"}), 401
+        else:
+            return jsonify({"token" : Jwt.encode({"username": username})}), 200
+            
         
         
     @user.get("/all")

@@ -5,7 +5,7 @@ app.config.from_pyfile("config.cfg")
 db.init_app(app)
 
 from .routes.home import home  # noqa
-from .routes.user import user  # noqa
+from .routes.UserRoutes import user  # noqa
 
 
 app.register_blueprint(home, url_prefix='/')

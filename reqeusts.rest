@@ -32,7 +32,7 @@ GET http://127.0.0.1:8000/user/1
 
 
 ###
-GET http://127.0.0.1:8000/protected
+GET http://127.0.0.1:8000/user
 Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMzkzMjIwNSwianRpIjoiYjYxMTMwOTUtZDA0Mi00NDlhLTgxOGEtNzFmNWExZjFiZDFmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkFsZXgiLCJuYmYiOjE3MzM5MzIyMDUsImNzcmYiOiI2YTdkNjg0MC1jNjZhLTQ4MDUtOTY5OS0xYTJiYzQ4NmU4ZDEiLCJleHAiOjE3MzM5MzU4MDV9.JYYU529Yvozcdb2yRt8mVWjHO3CnDuClVL3JMZYD4MI
 Content-Type: application/json
 

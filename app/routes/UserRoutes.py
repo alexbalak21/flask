@@ -44,7 +44,15 @@ class UserRoutes:
             return jsonify({"msg": "An error occurred. Please try again."}), 500
         except Exception as e:
             return jsonify({"msg": "Failed to add user to db."}), 500
-
+        
+    @user.post("/login")
+    def login():
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+        if not username or not password:
+            return jsonify({"msg": "Bad username or password"}), 401
+        
+        
     @user.get("/all")
     def get_all_users():
         return jsonify(UserRepo.get_all())

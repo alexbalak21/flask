@@ -30,7 +30,11 @@ class UserRepository:
             raise ValueError("There was an error while creating the user.")
 
         return new_user.as_dict()
-
+    
+    def get_all() -> list:
+        users = [user.as_dict() for user in User.query.all()]
+        return users
+    
     def get_one(id: int):
         user = User.query.filter_by(id=id).first()
         return None if user is None else user.as_dict()
@@ -42,15 +46,11 @@ class UserRepository:
         if new_username is not None:
             user.username = new_username
         if new_password is not None:
-            # Ensure you hash the password before storing it
             user.password = generate_password_hash(new_password)
-
+            
         db.session.commit()
         return user.as_dict()
 
-    def get_all():
-        users = [user.as_dict() for user in User.query.all()]
-        return users
 
     def delete_user(id: int):
         user = User.query.filter_by(id=id).first()
@@ -64,3 +64,11 @@ class UserRepository:
             db.session.rollback()
             raise ValueError(
                 "There was an error while deleting the user: " + str(e))
+            
+    def check_login(username: str, password: str):
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            return False
+        return check_password_hash(user.password, password)
+
+        

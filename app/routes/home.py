@@ -11,3 +11,8 @@ def home_page():
 def init():
     init_db()
     return jsonify({"msg": "Database Init Done."})
+
+
+@home.get("/login-required")
+def login_required():
+    return jsonify({"msg": "Login Required"}), 401

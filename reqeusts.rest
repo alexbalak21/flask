@@ -11,14 +11,13 @@ Content-Type: application/json
 }
 
 
-
 ####LOGIN USER
 POST http://127.0.0.1:8000/user/login
 Content-Type: application/json
 
 {
-    "username": "Alex",
-    "password": "pass123"
+    "username": "Max",
+    "password": "payne"
 }
 
 ###UPDATE
@@ -39,7 +38,8 @@ GET http://127.0.0.1:8000/user/all
 GET http://127.0.0.1:8000/user/1
 
 
-### D
+### DELETE
+DELETE http://127.0.0.1:8000/user/1
 
 
 ###

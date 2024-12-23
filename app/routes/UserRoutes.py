@@ -18,11 +18,6 @@ class UserRoutes:
         return decorated_function
 
 
-    @user.get("/init")
-    def home_page():
-        UserRepo.init_db()
-        return "Database Init Done."
-
     @user.get('/')
     @get_authorization_header
     def init():
@@ -54,7 +49,7 @@ class UserRoutes:
         if not UserRepo.user_exists(username):
             return jsonify({"msg": "User not found"}), 404
         if not UserRepo.check_login(username, password) :
-            return jsonify({"msg": "Bad password"}), 401
+            return jsonify({"msg": "Wrong password"}), 401
         else:
             return jsonify({"access_token" : Jwt.encode({"username": username}), "token_type" : "Bearer"}), 200
             
@@ -83,6 +78,11 @@ class UserRoutes:
         else:
             return jsonify(updated_user), 200
 
-    @user.delete("<int:user_id>")
-    def delete_user():
-        return None
+
+    @user.delete("/<int:user_id>")
+    def delete(user_id):
+        user = UserRepo.get_one(user_id)
+        if user is None:
+            return jsonify({"msg": "user not found"}), 404
+        UserRepo.delete_user(user_id)
+        return jsonify({"msg": "user successfully deleted"}), 200

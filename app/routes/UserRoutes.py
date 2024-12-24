@@ -1,26 +1,15 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, redirect
 from ..repository.UserRepository import UserRepository as UserRepo
 from ..auth.Jwt import Jwt
-from ..auth.Myjwt import create_jwt
+from ..auth.JwtTest import token_encode, token_decode, test_enc_dec
+from ..auth.Authentication import Authentication
 
 
 user = Blueprint('user', __name__)
 
 class UserRoutes:
     
-    def get_authorization_header(f):
-        def decorated_function(*args, **kwargs):
-            auth_header = request.headers.get('Authorization')
-            if auth_header:
-                print(f"Authorization : {auth_header}")
-            else:
-                print("No Authorization Header found")
-            return f(*args, **kwargs)
-        return decorated_function
-
-
     @user.get('/')
-    @get_authorization_header
     def init():
         return "User Home"
 
@@ -53,7 +42,24 @@ class UserRoutes:
         if not UserRepo.check_login(username, password) :
             return jsonify({"msg": "Wrong password"}), 401
         else:
-            return jsonify({"access_token" : create_jwt({"sub" : current_user.id, "username": current_user.username}), "token_type" : "Bearer"}), 200
+            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username}), "token_type" : "Bearer"}), 200
+        
+    
+    @user.get("/profile")
+    @Authentication.required
+    def get_profile(claims):
+        user_id = claims.get("sub")
+        user = UserRepo.get_one(user_id)
+        if user is None:
+            return jsonify({"msg": "user not found"}), 404
+        return jsonify(user)
+    
+    @user.get("/test")
+    def test_token():
+        token = token_encode({"sub": 1, "username": "test"})
+        dec = token_decode(token)
+        return jsonify(dec), 200
+    
             
         
         
@@ -61,12 +67,14 @@ class UserRoutes:
     def get_all_users():
         return jsonify(UserRepo.get_all())
 
+
     @user.get('/<int:id>')
     def find_by_id(id):
         user = UserRepo.get_one(id)
         if user is None:
             return jsonify({"msg": "user not found"}), 404
         return jsonify(user)
+
 
     @user.put("/<int:user_id>")
     def update(user_id):
@@ -88,3 +96,4 @@ class UserRoutes:
             return jsonify({"msg": "user not found"}), 404
         UserRepo.delete_user(user_id)
         return jsonify({"msg": "user successfully deleted"}), 200
+    

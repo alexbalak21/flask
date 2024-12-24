@@ -23,6 +23,18 @@ Content-Type: application/json
     "password": "pass123"
 }
 
+###TEST TOKEN
+GET http://127.0.0.1:8000/user/test
+
+
+
+
+###GET PROFILE
+GET http://127.0.0.1:8000/user/profile
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA0NzE0MH0.bccluVeREqQ4yq9LEVDif-h4v4Ek6gM-MzROmDL9FDQ
+Content-Type: application/json
+
+
 ###UPDATE
 PUT http://127.0.0.1:8000/user/1
 Content-Type: application/json

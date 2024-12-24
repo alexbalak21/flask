@@ -47,8 +47,17 @@ class UserRoutes:
     @user.post("/logout")
     @Authentication.required
     def logout(claims):
-        return jsonify({"msg": "User logged out"}), 200
-        
+        user_id = claims.get("sub")
+        user = UserRepo.get_one(user_id)
+        if user is None:
+            return jsonify({"msg": "Forbidden"}), 401
+        auth_header = request.headers.get('Authorization')
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]  # Strip "Bearer " from the token
+            Jwt.blacklist_token(token)
+            return jsonify({"msg": "Successfully logged out"}), 200
+        return jsonify({"msg": "Token not found"}), 400
+
     
     @user.get("/profile")
     @Authentication.required

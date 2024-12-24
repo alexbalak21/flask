@@ -9,7 +9,7 @@ POST http://127.0.0.1:8000/user/signin
 Content-Type: application/json
 
 {
-    "username": "Max",
+    "username": "Alex",
     "password": "pass123"
 }
 
@@ -23,16 +23,17 @@ Content-Type: application/json
     "password": "pass123"
 }
 
-###TEST TOKEN
-GET http://127.0.0.1:8000/user/test
-
-
-
 
 ###GET PROFILE
 GET http://127.0.0.1:8000/user/profile
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA1MTA0NCwianRpIjoiNDVkN2VjNGItOTE2Mi00MTRhLThiMWMtZGIyNjFjYTIzYmU4In0.h4V-oUBeNKx09nAC_1Cg7x3TwQeZKQsIGxiKyZqWL00
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA1NzYzNCwianRpIjoiMjNmMzk1M2UtMjVlMi00MjEwLTljZTktZTE1OGVmN2U1OTVkIn0.JK5Snt2K2bWIZhEjfEga6OFdEDjLbEpBIn496I-hPJ0
 Content-Type: application/json
+
+
+###LOGIOUT
+POST http://127.0.0.1:8000/user/logout
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA1NzYzNCwianRpIjoiMjNmMzk1M2UtMjVlMi00MjEwLTljZTktZTE1OGVmN2U1OTVkIn0.JK5Snt2K2bWIZhEjfEga6OFdEDjLbEpBIn496I-hPJ0
+
 
 
 ###UPDATE

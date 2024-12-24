@@ -11,9 +11,11 @@ class Authentication:
                 token = auth_header.split(" ")[1]  # Strip "Bearer " from the token
                 claims = Jwt().decode(token)
                 if "error" in claims:
-                    return redirect(url_for('user.login'))  # Redirect to login page if token is invalid
+                    ##REDIRECT TO LOGIN-REQUIRED PAGE
+                    return redirect("/login-required")  # Redirect to login page if token is invalid
             else:
-                return redirect(url_for('user.login'))  # Redirect to login page if no auth header
+                return redirect("/login-required")  # Redirect to login page if no auth header
+            ##Ne
             return f(claims, *args, **kwargs)
         decorated_function.__name__ = f.__name__  # Ensure the function name is unique
         return decorated_function

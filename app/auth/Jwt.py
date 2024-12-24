@@ -3,15 +3,13 @@ import jwt
 import uuid
 from datetime import datetime, timedelta
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
-import redis
-
-# Initialize Redis client
-redis_client = redis.StrictRedis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", 6379)), db=0)
+from ..models.Blacklist import Blacklist
+from ..db_conn import db
 
 class Jwt:
     @staticmethod
     def encode(payload):
-        expiry_time = datetime.now() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 15)))
+        expiry_time = datetime.utcnow() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 15)))
         payload.update({"exp": expiry_time, "jti": str(uuid.uuid4())})
         return jwt.encode(payload, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
     
@@ -35,8 +33,10 @@ class Jwt:
     @staticmethod
     def blacklist_token(token):
         jti = Jwt.get_jti(token)
-        redis_client.set(jti, "blacklisted", ex=int(os.getenv("EXPIRATION_TIME", 15)) * 60)
+        blacklisted_token = Blacklist(jti=jti)
+        db.session.add(blacklisted_token)
+        db.session.commit()
         
     @staticmethod
     def is_blacklisted(jti):
-        return redis_client.get(jti) is not None
+        return db.session.query(Blacklist).filter_by(jti=jti).first() is not None

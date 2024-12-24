@@ -20,12 +20,8 @@ class Jwt:
     @staticmethod
     def decode(token):
         try:
-            decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")])
-            print("Decoded token:", decoded)
-            return decoded
-        except ExpiredSignatureError:
-            print("Token has expired")
+            return jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")])
+        except ExpiredSignatureError:  
             return {"error": "Token has expired"}
         except InvalidTokenError:
-            print("Invalid token")
             return {"error": "Invalid token"}

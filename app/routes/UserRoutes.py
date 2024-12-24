@@ -46,12 +46,13 @@ class UserRoutes:
         password = request.json.get("password", None)
         if not username or not password:
             return jsonify({"msg": "Bad username or password"}), 401
-        if not UserRepo.user_exists(username):
+        current_user = UserRepo.check_login(username, password)
+        if current_user is None:
             return jsonify({"msg": "User not found"}), 404
         if not UserRepo.check_login(username, password) :
             return jsonify({"msg": "Wrong password"}), 401
         else:
-            return jsonify({"access_token" : Jwt.encode({"username": username}), "token_type" : "Bearer"}), 200
+            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username}), "token_type" : "Bearer"}), 200
             
         
         

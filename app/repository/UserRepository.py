@@ -68,8 +68,8 @@ class UserRepository:
     def user_exists(username: str) -> bool:
         return User.query.filter_by(username=username).first() is not None
             
-    def check_login(username: str, password: str) -> bool:
+    def check_login(username: str, password: str):
         user = User.query.filter_by(username=username).first()
-        return check_password_hash(user.password, password)
+        return user if user and check_password_hash(user.password, password) else None
 
         

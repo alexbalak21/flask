@@ -1,12 +1,15 @@
+###Home
+GET http://127.0.0.1:8000/
+
 ###REINIT ALL
-GET http://127.0.0.1:8000/user/init
+GET http://127.0.0.1:8000/init
 
 ####SIGN UP USER
 POST http://127.0.0.1:8000/user/signin
 Content-Type: application/json
 
 {
-    "username": "Alex",
+    "username": "Max",
     "password": "pass123"
 }
 
@@ -16,8 +19,8 @@ POST http://127.0.0.1:8000/user/login
 Content-Type: application/json
 
 {
-    "username": "Max",
-    "password": "payne"
+    "username": "Alex",
+    "password": "pass123"
 }
 
 ###UPDATE

@@ -7,13 +7,13 @@ class Jwt:
     def __init__(self):
         self.secret_key = os.getenv("SECRET_KEY")
         self.algorithm = os.getenv("ALGORITHM")
-        self.expiry_time = int(os.getenv("EXPIRATION_TIME", 15))  # Default to 15 minutes if not set
+        self.expiry_time = int(os.getenv("EXPIRATION_TIME"))
         self.issuer = os.getenv("ISSUER")
         self.audience = os.getenv("AUDIENCE")
     
     @staticmethod
     def encode(payload):
-        expiry_time = datetime.utcnow() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 15)))
+        expiry_time = datetime.utcnow() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME")))
         payload.update({"exp": expiry_time})
         return jwt.encode(payload, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
     

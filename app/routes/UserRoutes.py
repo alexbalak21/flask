@@ -1,7 +1,6 @@
-from flask import Blueprint, jsonify, request, redirect
+from flask import Blueprint, jsonify, request
 from ..repository.UserRepository import UserRepository as UserRepo
 from ..auth.Jwt import Jwt
-from ..auth.JwtTest import token_encode, token_decode, test_enc_dec
 from ..auth.Authentication import Authentication
 
 
@@ -54,15 +53,7 @@ class UserRoutes:
             return jsonify({"msg": "user not found"}), 404
         return jsonify(user)
     
-    @user.get("/test")
-    def test_token():
-        token = token_encode({"sub": 1, "username": "test"})
-        dec = token_decode(token)
-        return jsonify(dec), 200
-    
-            
-        
-        
+
     @user.get("/all")
     def get_all_users():
         return jsonify(UserRepo.get_all())

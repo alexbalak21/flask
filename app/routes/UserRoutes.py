@@ -43,6 +43,12 @@ class UserRoutes:
         else:
             return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username}), "token_type" : "Bearer"}), 200
         
+        
+    @user.post("/logout")
+    @Authentication.required
+    def logout(claims):
+        return jsonify({"msg": "User logged out"}), 200
+        
     
     @user.get("/profile")
     @Authentication.required

@@ -31,7 +31,7 @@ GET http://127.0.0.1:8000/user/test
 
 ###GET PROFILE
 GET http://127.0.0.1:8000/user/profile
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA0NzE0MH0.bccluVeREqQ4yq9LEVDif-h4v4Ek6gM-MzROmDL9FDQ
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA1MTA0NCwianRpIjoiNDVkN2VjNGItOTE2Mi00MTRhLThiMWMtZGIyNjFjYTIzYmU4In0.h4V-oUBeNKx09nAC_1Cg7x3TwQeZKQsIGxiKyZqWL00
 Content-Type: application/json
 
 

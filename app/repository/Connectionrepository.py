@@ -37,3 +37,12 @@ class ConnectionRepository:
         db.session.delete(connection)
         db.session.commit()
         return connection.as_dict()
+    
+    
+    def delete_connection_by_id(id: int):
+        connection = Connection.query.filter_by(id=id).first()
+        if connection is None:
+            return False
+        db.session.delete(connection)
+        db.session.commit()
+        return True

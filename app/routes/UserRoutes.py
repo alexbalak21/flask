@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 from ..repository.UserRepository import UserRepository as UserRepo
 from ..auth.Jwt import Jwt
 from ..auth.Authentication import Authentication
+from ..repository.ConnectionRepository import ConnectionRepository as ConnRepo
+import uuid
 
 
 user = Blueprint('user', __name__)
@@ -42,7 +44,9 @@ class UserRoutes:
         if not current_user:
             return jsonify({"msg": "Wrong password"}), 401
         else:
-            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username}), "token_type" : "Bearer"}), 200
+            jti = uuid.uuid4()
+            ConnRepo.add_connection(current_user.id, jti)
+            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username, "jti" : jti}), "token_type" : "Bearer"}), 200
         
         
     @user.post("/logout")
@@ -52,12 +56,9 @@ class UserRoutes:
         user = UserRepo.get_one(user_id)
         if user is None:
             return jsonify({"msg": "Forbidden"}), 401
-        auth_header = request.headers.get('Authorization')
-        if auth_header and auth_header.startswith("Bearer "):
-            token = auth_header.split(" ")[1]  # Strip "Bearer " from the token
-            Jwt.blacklist_token(token)
+        if ConnRepo.delete_connection(user_id):
             return jsonify({"msg": "Successfully logged out"}), 200
-        return jsonify({"msg": "Token not found"}), 400
+        return jsonify({"msg": "Login information not found"}), 401
 
     
     @user.get("/profile")

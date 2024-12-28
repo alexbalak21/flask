@@ -4,12 +4,18 @@ from ..models.Connection import Connection
 
 class ConnectionRepository:
     
-    def create_connection(id: int, key: str) -> dict:
-        new_connection = Connection(id=id, key=key)
-        db.session.add(new_connection)
+    #CREATE CONNECTION RETURN CONNECTION TRUE OR FALSE
+    def create_connection(id: int, key: str) -> bool:
+        connection = Connection(id=id, key=key)
+        db.session.add(connection)
         db.session.commit()
-        return new_connection.as_dict()
+        return True
 
+    
+    #CHECK IF CONNECTION EXISTS BY KEY
+    def check_connection_exists(key: str) -> bool:
+        connection = Connection.query.filter_by(key=key).first()
+        return connection is not None
     
     def get_by_key(key: str):
         connection = Connection.query.filter_by(key=key).first()

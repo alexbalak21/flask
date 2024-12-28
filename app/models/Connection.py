@@ -4,7 +4,7 @@ from ..db_conn import db
 
 class Connection(db.Model):
     id: Mapped[int] = mapped_column(Integer)
-    key: Mapped[str] = mapped_column(String, nullable=False)
+    key: Mapped[str] = mapped_column(String, nullable=False, primary_key=True)
 
     def __str__(self):
         return f"{{id: {self.id}, key: {self.key}}}"

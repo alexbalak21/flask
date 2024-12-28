@@ -3,16 +3,15 @@ import jwt
 import uuid
 from datetime import datetime, timedelta
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
-from ..models.Blacklist import Blacklist
+from ..repository.ConnectionRepository import ConnectionRepository as ConnRepo
 from ..models.Connection import Connection
-from ..db_conn import db
 
 
 class Jwt:
     @staticmethod
     def encode(payload):
         expiry_time = datetime.utcnow() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 15)))
-        payload.update({"exp": expiry_time, "jti": str(uuid.uuid4())})
+        payload.update({"exp": expiry_time})
         return jwt.encode(payload, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
 
     @staticmethod
@@ -23,7 +22,7 @@ class Jwt:
             id = decoded.get("sub")
             if Connection.query.filter_by(id=id, key=jti).first() is not None:
                 return decoded
-            return {"error": "Invalid token"}
+            return {"error": "Connection not found"}
         except ExpiredSignatureError:
             return {"error": "Token has expired"}
         except InvalidTokenError:

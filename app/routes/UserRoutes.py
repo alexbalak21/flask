@@ -38,15 +38,16 @@ class UserRoutes:
         if not username or not password:
             return jsonify({"msg": "Bad username or password"}), 401
         
-        if not UserRepo.check_user(username):
+        if not UserRepo.user_exists(username):
             return jsonify({"msg": "User not found"}), 404
         current_user = UserRepo.check_login(username, password)
         if not current_user:
             return jsonify({"msg": "Wrong password"}), 401
         else:
-            jti = uuid.uuid4()
-            ConnRepo.add_connection(current_user.id, jti)
-            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username, "jti" : jti}), "token_type" : "Bearer"}), 200
+            jti = str(uuid.uuid4())
+            print(jti)
+            ConnRepo.create_connection(current_user.id, jti)
+            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username, "jti" : jti}), "token_type" : "Bearer", "jti" : jti}), 200
         
         
     @user.post("/logout")
@@ -56,7 +57,7 @@ class UserRoutes:
         user = UserRepo.get_one(user_id)
         if user is None:
             return jsonify({"msg": "Forbidden"}), 401
-        if ConnRepo.delete_connection(user_id):
+        if ConnRepo.delete_connection_by_id(user_id):
             return jsonify({"msg": "Successfully logged out"}), 200
         return jsonify({"msg": "Login information not found"}), 401
 

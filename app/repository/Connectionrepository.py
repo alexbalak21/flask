@@ -10,6 +10,7 @@ class ConnectionRepository:
         db.session.add(connection)
         db.session.commit()
         return True
+    
 
     
     #CHECK IF CONNECTION EXISTS BY KEY

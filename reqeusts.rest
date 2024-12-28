@@ -32,8 +32,7 @@ Content-Type: application/json
 
 ###LOGIOUT
 POST http://127.0.0.1:8000/user/logout
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTczNTA1NzYzNCwianRpIjoiMjNmMzk1M2UtMjVlMi00MjEwLTljZTktZTE1OGVmN2U1OTVkIn0.JK5Snt2K2bWIZhEjfEga6OFdEDjLbEpBIn496I-hPJ0
-
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImp0aSI6IjVkZDI0ODExLWNjOTAtNDM0Yi1iZTJmLTJhYjg5NjMwYzlkZCIsImV4cCI6MTczNTQwNTE3OH0._wuHqDa2-YMaqMbLS2e1eFdFlCeQQbYTekTOcR3S-gs
 
 
 ###UPDATE

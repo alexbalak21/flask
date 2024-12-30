@@ -36,6 +36,20 @@ class ConnectionRepository:
         connection = Connection.query.filter_by(key=key).first()
         return connection is not None
     
+    def get_id_by_key(key: str) -> int:
+        """
+        Get the ID of the connection by key.
+
+        Args:
+            key (str): The key of the connection.
+
+        Returns:
+            int: The ID of the connection if found, 0 otherwise.
+        """
+        connection = Connection.query.filter_by(key=key).first()
+        return connection.id if connection else 0
+    
+    
     @staticmethod
     def get_by_key(key: str):
         """
@@ -85,3 +99,16 @@ class ConnectionRepository:
                 count += 1
         db.session.commit()
         return count
+    
+    @staticmethod
+    def delete_by_jti(key: str):
+        """
+        Delete a connection by jti.
+
+        Args:
+            jti (str): The jti of the connection.
+        """
+        connection = Connection.query.filter_by(key=key).first()
+        if connection is None: return
+        db.session.delete(connection)
+        db.session.commit()

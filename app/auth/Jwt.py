@@ -34,15 +34,15 @@ class Jwt:
             ConnRepo.delete_expired_connections()
         
     def generate_access_token(user : User):
-        expiry_time = datetime.now() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 15)))
+        expiry_time = datetime.now() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 1)))
         jti = ConnRepo.create_connection(user.id, expiry_time.isoformat())
         return jwt.encode({"username": user.username, "sub": str(user.id), "jti": jti, "exp": expiry_time}, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
     
     @staticmethod
-    def get_sub_from_expired_token(token) -> int:
+    def get_sub_and_jti_from_expired_token(token) -> int:
         try:
             decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")], options={"verify_signature": False})
-            return int(decoded.get("sub"))
+            return [int(decoded.get("sub")), decoded.get("jti")]
         except InvalidTokenError:
             return 0
        
@@ -51,7 +51,7 @@ class Jwt:
     @staticmethod
     def generate_refresh_token(user : User):
         expiry_time = datetime.now() + timedelta(minutes=int(os.getenv("REFRESH_EXPIRATION_TIME", 60)))
-        jti = RefreshRepo.create(user.uuid, expiry_time.isoformat())
+        jti = RefreshRepo.create(user.id, user.uuid, expiry_time.isoformat())
         return jwt.encode({"sub": user.uuid, "jti": jti, "exp": expiry_time}, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
 
     @staticmethod

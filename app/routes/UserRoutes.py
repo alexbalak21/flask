@@ -3,7 +3,7 @@ from ..repository.UserRepository import UserRepository as UserRepo
 from ..auth.Jwt import Jwt
 from ..auth.Authentication import Authentication
 from ..repository.ConnectionRepository import ConnectionRepository as ConnRepo
-import uuid
+from ..repository.RefreshRepository import RefreshRepository as RefreshRepo
 
 
 user = Blueprint('user', __name__)
@@ -37,14 +37,14 @@ class UserRoutes:
         password = request.json.get("password", None)
         if not username or not password:
             return jsonify({"msg": "Bad username or password"}), 401
-        if not UserRepo.user_exists(username):
+        if not UserRepo.user_exists_by_username(username):
             return jsonify({"msg": "User not found"}), 404
         current_user = UserRepo.check_login(username, password)
         if not current_user:
             return jsonify({"msg": "Wrong password"}), 401
         else:
             access_token = {"access_token" : Jwt.generate_access_token(current_user), "token_type" : "Bearer"}
-            refresh_token = {"refresh_token" : Jwt.generate_refresh_token({"sub" : current_user.uuid}), "token_type" : "Refresh"}
+            refresh_token = {"refresh_token" : Jwt.generate_refresh_token(current_user), "refresh_token_type" : "X-Refresh-Token"}
             return jsonify(access_token, refresh_token), 200
         
         
@@ -66,11 +66,19 @@ class UserRoutes:
         if not refresh_token or not auth_token:
             return jsonify({"msg": "No refresh token or auth token provided"}), 401
         try:
-            claims = Jwt.decode_refresh_token(refresh_token)
-            if not ConnRepo.check_connection(claims.get("sub"), claims.get("jti")):
+            refresh_data = Jwt.decode_refresh_token(refresh_token)
+            sub, rti = refresh_data.get("sub"), refresh_data.get("rti")
+            [user_id, jti] = Jwt.get_sub_and_jti_from_expired_token(auth_token.split(" ")[1])
+            user = UserRepo.get_user_by_id_and_uuid(user_id, sub)
+            refresh_id = ConnRepo.get_id_by_key(rti)
+            if user is None:
+                return jsonify({"msg": "User not found"}), 404
+            if refresh_id == 0 or user_id != refresh_id:
                 return jsonify({"msg": "Invalid refresh token"}), 401
-            access_token = {"access_token" : Jwt.generate_access_token(user), "token_type" : "Bearer"}
-            return jsonify(access_token), 200
+            RefreshRepo.delete_refresh_token_by_rti(rti)
+            ConnRepo.delete_by_jti(jti)
+            res = {"access_token" : Jwt.generate_access_token(user), "token_type" : "Bearer", "refresh_token" : Jwt.generate_refresh_token(user), "refresh_token_type" : "X-Refresh-Token"}
+            return jsonify(res), 200
         except Exception as e:
             return jsonify({"msg": "Invalid refresh token"}), 401
 
@@ -109,18 +117,6 @@ class UserRoutes:
             return jsonify({"msg": "user not found"}), 404
         else:
             return jsonify(updated_user), 200
-
-    @user.get("/exp")
-    def expired():
-        auth_token = request.headers.get("Authorization", None)
-        jwt = auth_token.split(" ")[1]
-        if not auth_token:
-            return jsonify({"msg": "No token provided"}), 401
-        try:
-            claims = Jwt.decode_expired_access_token(jwt)
-            return jsonify(claims), 200
-        except Exception as e:
-            return jsonify({"msg": "Invalid token"}), 401
     
     @user.delete("/<int:user_id>")
     def delete(user_id):

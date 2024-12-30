@@ -34,11 +34,12 @@ class ConnectionRepository:
     def delete_connection_by_key(key: str):
         connection = Connection.query.filter_by(key=key).first()
         if connection is None:
-            raise ValueError("Connection not found.")
-        db.session.delete(connection)
-        db.session.commit()
-        return connection.as_dict()
-    
+            raise False
+        try:
+            db.session.delete(connection)
+            db.session.commit()
+            return True
+        except: return False
     
     def delete_connection_by_id(id: int):
         connection = Connection.query.filter_by(id=id).first()

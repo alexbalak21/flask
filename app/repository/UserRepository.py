@@ -36,6 +36,9 @@ class UserRepository:
         return users
     
     def get_one(id: int):
+        def get_by_id(id: int):
+            user = User.query.filter_by(id=id).first()
+            return None if user is None else user.as_dict()
         user = User.query.filter_by(id=id).first()
         return None if user is None else user.as_dict()
 

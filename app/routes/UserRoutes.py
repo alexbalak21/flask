@@ -53,11 +53,11 @@ class UserRoutes:
     @user.post("/logout")
     @Authentication.required
     def logout(claims):
-        user_id = claims.get("sub")
-        user = UserRepo.get_one(user_id)
+        id = claims.get("sub")
+        user = UserRepo.get_by_id(id)
         if user is None:
             return jsonify({"msg": "Forbidden"}), 401
-        if ConnRepo.delete_connection_by_id(user_id):
+        if ConnRepo.delete_connection_by_key(claims.get("jti")) :
             return jsonify({"msg": "Successfully logged out"}), 200
         return jsonify({"msg": "Login information not found"}), 401
 
@@ -66,7 +66,7 @@ class UserRoutes:
     @Authentication.required
     def get_profile(claims):
         user_id = claims.get("sub")
-        user = UserRepo.get_one(user_id)
+        user = UserRepo.get_by_id(user_id)
         if user is None:
             return jsonify({"msg": "user not found"}), 404
         return jsonify(user)
@@ -79,7 +79,7 @@ class UserRoutes:
 
     @user.get('/<int:id>')
     def find_by_id(id):
-        user = UserRepo.get_one(id)
+        user = UserRepo.get_by_id(id)
         if user is None:
             return jsonify({"msg": "user not found"}), 404
         return jsonify(user)
@@ -100,7 +100,7 @@ class UserRoutes:
 
     @user.delete("/<int:user_id>")
     def delete(user_id):
-        user = UserRepo.get_one(user_id)
+        user = UserRepo.get_by_id(user_id)
         if user is None:
             return jsonify({"msg": "user not found"}), 404
         UserRepo.delete_user(user_id)

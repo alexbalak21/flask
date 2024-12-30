@@ -62,10 +62,11 @@ class UserRoutes:
     @user.post("/refresh")
     def refresh():
         refresh_token = request.json.get("refresh_token", None)
-        if not refresh_token:
-            return jsonify({"msg": "No refresh token provided"}), 401
+        auth_token = request.headers.get("Authorization", None)
+        if not refresh_token or not auth_token:
+            return jsonify({"msg": "No refresh token or auth token provided"}), 401
         try:
-            claims = Jwt.decode(refresh_token)
+            claims = Jwt.decode_refresh_token(refresh_token)
             if not ConnRepo.check_connection(claims.get("sub"), claims.get("jti")):
                 return jsonify({"msg": "Invalid refresh token"}), 401
             access_token = {"access_token" : Jwt.generate_access_token(user), "token_type" : "Bearer"}
@@ -109,7 +110,18 @@ class UserRoutes:
         else:
             return jsonify(updated_user), 200
 
-
+    @user.get("/exp")
+    def expired():
+        auth_token = request.headers.get("Authorization", None)
+        jwt = auth_token.split(" ")[1]
+        if not auth_token:
+            return jsonify({"msg": "No token provided"}), 401
+        try:
+            claims = Jwt.decode_expired_access_token(jwt)
+            return jsonify(claims), 200
+        except Exception as e:
+            return jsonify({"msg": "Invalid token"}), 401
+    
     @user.delete("/<int:user_id>")
     def delete(user_id):
         user = UserRepo.get_by_id(user_id)

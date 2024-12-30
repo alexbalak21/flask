@@ -33,6 +33,13 @@ Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJu
 POST http://127.0.0.1:8000/user/logout
 Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImp0aSI6ImU2NTE0Yjk2LTBhZWYtNDU1Yy05NDVlLTgyY2Y5MTM2YzQ3ZiIsImV4cCI6MTczNTU1MDk5Nn0.2ErI_ipMZqdp6I-CK7FAJij69_HppWfEi6-WWiwAZFQ
 
+
+###EXPIRED TOKEN TEST
+GET http://127.0.0.1:8000/user/exp
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiQWxleCIsImp0aSI6ImU2NTE0Yjk2LTBhZWYtNDU1Yy05NDVlLTgyY2Y5MTM2YzQ3ZiIsImV4cCI6MTczNTU1MDk5Nn0.2ErI_ipMZqdp6I-CK7FAJij69_HppWfEi6-WWiwAZFQ
+
+
+
 ###UPDATE
 PUT http://127.0.0.1:8000/user/1
 Content-Type: application/json

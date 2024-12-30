@@ -37,7 +37,16 @@ class Jwt:
         expiry_time = datetime.now() + timedelta(minutes=int(os.getenv("EXPIRATION_TIME", 15)))
         jti = ConnRepo.create_connection(user.id, expiry_time.isoformat())
         return jwt.encode({"username": user.username, "sub": str(user.id), "jti": jti, "exp": expiry_time}, key=os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
-        
+    
+    @staticmethod
+    def get_sub_from_expired_token(token) -> int:
+        try:
+            decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")], options={"verify_signature": False})
+            return int(decoded.get("sub"))
+        except InvalidTokenError:
+            return 0
+       
+
         
     @staticmethod
     def generate_refresh_token(user : User):

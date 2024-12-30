@@ -60,7 +60,7 @@ class Jwt:
             decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")])
             jti = decoded.get("jti")
             uuid = decoded.get("sub")
-            ref = RefreshRepo.get_refresh_token_by_jti(jti)
+            ref = RefreshRepo.get_id_by_jti(jti)
             if ref is not None and ref.uuid == uuid:
                 return decoded
             RefreshRepo.delete_refresh_token_by_jti(jti) 

@@ -1,4 +1,3 @@
-a = 1
+import datetime
 
-if not a :
-    print("a is 0")
+print(datetime.datetime.now()) # 2021-10-06T14:00:00.000000

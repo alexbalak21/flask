@@ -61,8 +61,9 @@ class UserRoutes:
     
     @user.post("/refresh")
     def refresh():
-        refresh_token = request.json.get("refresh_token", None)
+        refresh_token = request.headers.get("X-Refresh-Token", None)
         auth_token = request.headers.get("Authorization", None)
+        print(Jwt.decode_refresh_token(refresh_token))
         if not refresh_token or not auth_token:
             return jsonify({"msg": "No refresh token or auth token provided"}), 401
         try:

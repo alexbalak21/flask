@@ -1,6 +1,6 @@
 from .. import db
 from ..models.Refresh import Refresh
-import datetime
+from datetime import datetime
 import uuid
 
 class RefreshRepository:
@@ -38,7 +38,7 @@ class RefreshRepository:
         return refresh is not None
     
     
-    def get_id_by_jti(jti: str) -> int:
+    def get_id_by_jti(jti: str):
         """
         Get the ID of the refresh token by jti.
 
@@ -53,8 +53,8 @@ class RefreshRepository:
         if refresh_time < datetime.now():
             db.session.delete(refresh)
             db.session.commit()
-            return 0
-        return 0 if refresh is None else refresh.id
+            return None
+        return refresh if refresh else None
     
     def delete_by_jti(jti: str) -> bool:
         """
@@ -72,3 +72,14 @@ class RefreshRepository:
         db.session.delete(refresh)
         db.session.commit()
         return True
+    
+    def delete_expired_refresh_tokens():
+        """
+        Delete all expired refresh tokens.
+        """
+        for refresh in Refresh.query.all():
+            if refresh.is_expired():
+                db.session.delete(refresh)
+        db.session.commit()
+        
+        

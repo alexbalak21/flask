@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from ..db_conn import db
-import datetime
+from datetime import datetime
 
 class Connection(db.Model):
     id: Mapped[int] = mapped_column(Integer)

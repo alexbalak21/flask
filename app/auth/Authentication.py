@@ -12,9 +12,9 @@ class Authentication:
                 claims = Jwt().decode(token)
                 if "error" in claims:
                     ##REDIRECT TO LOGIN-REQUIRED PAGE
-                    return redirect("/login-required?error=Invalid Token")  # Redirect to login page if token is invalid
+                    return redirect(f"/login-required?error={claims["error"]}")  # Redirect to login page if token is invalid
             else:
-                return redirect("/login-required?error=No Authorization found in header")  # Redirect to login page if no auth header
+                return redirect("/login-required?error=No Authorization found in header.")  # Redirect to login page if no auth header
             ##RETURN FUNCTION
             return f(claims, *args, **kwargs)
         decorated_function.__name__ = f.__name__  # Ensure the function name is unique

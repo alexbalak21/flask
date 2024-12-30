@@ -37,17 +37,15 @@ class UserRoutes:
         password = request.json.get("password", None)
         if not username or not password:
             return jsonify({"msg": "Bad username or password"}), 401
-        
         if not UserRepo.user_exists(username):
             return jsonify({"msg": "User not found"}), 404
         current_user = UserRepo.check_login(username, password)
         if not current_user:
             return jsonify({"msg": "Wrong password"}), 401
         else:
-            jti = str(uuid.uuid4())
-            print(jti)
-            ConnRepo.create_connection(current_user.id, jti)
-            return jsonify({"access_token" : Jwt.encode({"sub" : current_user.id, "username": current_user.username, "jti" : jti}), "token_type" : "Bearer", "jti" : jti}), 200
+            access_token = {"access_token" : Jwt.generate_access_token(current_user), "token_type" : "Bearer"}
+            refresh_token = {"refresh_token" : Jwt.generate_refresh_token({"sub" : current_user.uuid}), "token_type" : "Refresh"}
+            return jsonify(access_token, refresh_token), 200
         
         
     @user.post("/logout")
@@ -60,6 +58,20 @@ class UserRoutes:
         if ConnRepo.delete_connection_by_key(claims.get("jti")) :
             return jsonify({"msg": "Successfully logged out"}), 200
         return jsonify({"msg": "Login information not found"}), 401
+    
+    @user.post("/refresh")
+    def refresh():
+        refresh_token = request.json.get("refresh_token", None)
+        if not refresh_token:
+            return jsonify({"msg": "No refresh token provided"}), 401
+        try:
+            claims = Jwt.decode(refresh_token)
+            if not ConnRepo.check_connection(claims.get("sub"), claims.get("jti")):
+                return jsonify({"msg": "Invalid refresh token"}), 401
+            access_token = {"access_token" : Jwt.generate_access_token(user), "token_type" : "Bearer"}
+            return jsonify(access_token), 200
+        except Exception as e:
+            return jsonify({"msg": "Invalid refresh token"}), 401
 
     
     @user.get("/profile")

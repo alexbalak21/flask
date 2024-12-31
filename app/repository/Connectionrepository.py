@@ -36,7 +36,7 @@ class ConnectionRepository:
         connection = Connection.query.filter_by(key=key).first()
         return connection is not None
     
-    def get_id_by_key(key: str) -> int:
+    def get_id_by_key(jti) -> int:
         """
         Get the ID of the connection by key.
 
@@ -46,7 +46,7 @@ class ConnectionRepository:
         Returns:
             int: The ID of the connection if found, 0 otherwise.
         """
-        connection = Connection.query.filter_by(key=key).first()
+        connection = Connection.query.filter_by(key=jti).first()
         return connection.id if connection else 0
     
     

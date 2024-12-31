@@ -26,7 +26,6 @@ class Jwt:
                 return decoded
             return {"error": "Connection not found"}
         except ExpiredSignatureError:
-            ConnRepo.delete_connection_by_key(jti)
             return {"error": "Token has expired"}
         except InvalidTokenError:
             return {"error": "Invalid token"}
@@ -40,6 +39,7 @@ class Jwt:
     
     @staticmethod
     def get_sub_and_jti_from_expired_token(token) -> int:
+
         try:
             decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")], options={"verify_signature": False})
             return [int(decoded.get("sub")), decoded.get("jti")]
@@ -47,7 +47,6 @@ class Jwt:
             return 0
        
 
-        
     @staticmethod
     def generate_refresh_token(user : User):
         expiry_time = datetime.now() + timedelta(minutes=int(os.getenv("REFRESH_EXPIRATION_TIME", 60)))
@@ -60,13 +59,12 @@ class Jwt:
             decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")])
             jti = decoded.get("jti")
             uuid = decoded.get("sub")
-            ref = RefreshRepo.get_id_by_jti(jti)
+            ref = RefreshRepo.get_refresh_by_jti(jti)
             if ref is not None and ref.uuid == uuid:
                 return decoded
-            RefreshRepo.delete_refresh_token_by_jti(jti) 
+            RefreshRepo.delete_by_jti(jti)
+            raise Exception("Refresh token ID not found")
         except ExpiredSignatureError:
             return {"error": "Refresh token has expired"}
         except InvalidTokenError:
             return {"error": "Invalid refresh token"}
-        finally:
-            RefreshRepo.delete_expired_refresh_tokens()

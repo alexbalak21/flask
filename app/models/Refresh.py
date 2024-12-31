@@ -12,10 +12,12 @@ class Refresh(db.Model):
 
     #GET THE USER ID by UUID FROM USER TABLE, COMPARE THIS ID TO THE SUB IN THE AUTH JWT
     def is_expired(self):
+        if self is None:
+            return None
         return datetime.now() > datetime.fromisoformat(self.expires_at)
     
     def __str__(self):
-        return f"{{id: {self.id}, uuid: {self.user_uuid}, jti: {self.jti}}}"
+        return f"{{id: {self.id}, uuid: {self.uuid}, jti: {self.jti}}}"
 
     def as_dict(self):
-        return {"id": self.id, "key": self.key}
+        return {"id": self.id, "key": self.uuid, "jti": self.jti, "expires_at": self.expires_at}

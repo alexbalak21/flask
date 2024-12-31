@@ -38,7 +38,7 @@ class RefreshRepository:
         return refresh is not None
     
     
-    def get_id_by_jti(jti: str):
+    def get_refresh_by_jti(jti: str):
         """
         Get the ID of the refresh token by jti.
 
@@ -49,8 +49,9 @@ class RefreshRepository:
             dict: A dictionary representation of the refresh token if found, None otherwise.
         """
         refresh = Refresh.query.filter_by(jti=jti).first()
-        refresh_time = datetime.fromisoformat(refresh.expires_at)
-        if refresh_time < datetime.now():
+        if refresh is None:
+            return None
+        if refresh.is_expired():
             db.session.delete(refresh)
             db.session.commit()
             return None

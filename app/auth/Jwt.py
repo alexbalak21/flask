@@ -59,11 +59,10 @@ class Jwt:
             decoded = jwt.decode(token, key=os.getenv("SECRET_KEY"), algorithms=[os.getenv("ALGORITHM")])
             jti = decoded.get("jti")
             uuid = decoded.get("sub")
-            ref = RefreshRepo.get_refresh_by_jti(jti)
-            if ref is not None and ref.uuid == uuid:
+            storedRefresh = RefreshRepo.get_refresh_by_jti(jti)
+            if storedRefresh is not None and storedRefresh.uuid == uuid:
                 return decoded
-            RefreshRepo.delete_by_jti(jti)
-            raise Exception("Refresh token ID not found")
+            raise Exception("Refresh connection not found")
         except ExpiredSignatureError:
             return {"error": "Refresh token has expired"}
         except InvalidTokenError:

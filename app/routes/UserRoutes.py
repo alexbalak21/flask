@@ -76,11 +76,12 @@ class UserRoutes:
                 return jsonify({"msg": "User not found"}), 404
             if refresh_id == 0 or user_id != refresh_id:
                 return jsonify({"msg": "Invalid refresh token"}), 401
+            #DELETING OLD AUTH AND REFRESH TOKEN
+            RefreshRepo.delete_by_jti(rti)
             ConnRepo.delete_by_jti(jti)
             res = {"access_token" : Jwt.generate_access_token(user), "token_type" : "Bearer", "refresh_token" : Jwt.generate_refresh_token(user), "refresh_token_type" : "X-Refresh-Token"}
             return jsonify(res), 200
         except Exception as e:
-            print(e)
             return jsonify({"msg": e.__str__()}), 401
 
     

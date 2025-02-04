@@ -23,9 +23,7 @@ class UserRepository:
         try:
             db.session.add(new_user)
             db.session.commit()
-            print("USER CREATED")
         except IntegrityError:
-            print("ERROR CREATING USER")
             db.session.rollback()
             raise ValueError("There was an error while creating the user.")
 
@@ -34,10 +32,15 @@ class UserRepository:
     def get_all() -> list:
         users = [user.as_dict() for user in User.query.all()]
         return users
-    
-    def get_one(id: int):
+
+    def get_by_id(id: int):
         user = User.query.filter_by(id=id).first()
-        return None if user is None else user.as_dict()
+        return user.as_dict() if user else None
+    
+    def get_user_by_id_and_uuid(id : int, uuid: str) -> User:
+        user = User.query.filter_by(id=id, uuid=uuid).first()
+        return user if user else None
+
 
     def update_user(id: int, new_username=None, new_password=None):
         user = User.query.filter_by(id=id).first()
@@ -64,9 +67,12 @@ class UserRepository:
             db.session.rollback()
             raise ValueError(
                 "There was an error while deleting the user: " + str(e))
-    
-    def user_exists(username: str) -> bool:
+            
+    def user_exists_by_username(username: str) -> bool:
         return User.query.filter_by(username=username).first() is not None
+    
+    def user_exists_by_id(id : int) -> bool:
+        return User.query.filter_by(id=id).first() is not None
             
     def check_login(username: str, password: str):
         user = User.query.filter_by(username=username).first()
